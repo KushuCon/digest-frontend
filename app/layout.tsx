@@ -14,7 +14,7 @@ const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", displ
 export const metadata: Metadata = {
   title: "Aperture — Market Intelligence",
   description: "A premium dashboard for portfolio tracking and AI-curated market news.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/phto.png" },
 };
 
 export const viewport: Viewport = { themeColor: "#0a0a0b" };
