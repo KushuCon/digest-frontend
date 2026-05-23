@@ -51,6 +51,28 @@ export type StockQuote = {
   change_pct?: number;
 };
 
+export type Holding = {
+  ticker: string;
+  name?: string;
+  logo?: string | null;
+  price?: number;
+  change_pct?: number;
+  shares?: number;
+  buy_price?: number;
+  value?: number;
+  pnl?: number;
+  pnl_pct?: number;
+};
+
+export type Portfolio = {
+  holdings?: Holding[];
+  total_value?: number;
+  total_cost?: number;
+  total_pnl?: number;
+  total_pnl_pct?: number;
+  [k: string]: any;
+};
+
 async function j<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, {
     ...init,
@@ -85,6 +107,9 @@ export const api = {
   movers: () => j<any>(`/api/movers`),
 
   stock: (ticker: string) => j<StockQuote>(`/api/stock/${encodeURIComponent(ticker)}`),
+
+  updateHolding: (p: { ticker: string; shares: number; buy_price: number; name?: string }) =>
+    j<any>(`/api/portfolio/update${q(p)}`, { method: "POST" }),
 
   trigger: (secret: string) => j<{ ok: boolean }>(`/api/trigger${q({ secret })}`, { method: "POST" }),
 };
