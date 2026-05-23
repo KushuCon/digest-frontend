@@ -1,11 +1,12 @@
 "use client";
 import { useApi } from "@/hooks/use-api";
-import { Stats } from "@/lib/api";
+import { normalizeStats } from "@/lib/api";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fmtNum, timeAgo } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Database, Newspaper, Radio, Clock } from "lucide-react";
+import { useMemo } from "react";
 
 const Stat = ({
   label, value, icon: Icon, hint,
@@ -23,7 +24,15 @@ const Stat = ({
 );
 
 export function StatsStrip() {
-  const { data, isLoading, error } = useApi<Stats>("/api/stats");
+  const { data: rawStats, isLoading, error } = useApi<any>("/api/stats");
+  const { data: rawSources } = useApi<any>("/api/sources");
+
+  const s = useMemo(() => normalizeStats(rawStats), [rawStats]);
+  const sourcesCount = useMemo(() => {
+    if (!rawSources) return undefined;
+    if (Array.isArray(rawSources)) return rawSources.length;
+    return undefined;
+  }, [rawSources]);
 
   if (isLoading) {
     return (
@@ -32,24 +41,17 @@ export function StatsStrip() {
       </div>
     );
   }
-  if (error) {
-    return (
-      <Card className="p-5 border-bearish/30">
-        <div className="text-sm text-bearish">Failed to load stats — {error.message}</div>
-      </Card>
-    );
-  }
-  const s = data || {};
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, staggerChildren: 0.05 }}
+      transition={{ duration: 0.5 }}
       className="grid grid-cols-2 lg:grid-cols-4 gap-4"
     >
       <Stat label="Total articles"  value={fmtNum(s.articles_total)}  icon={Newspaper} />
       <Stat label="Today"           value={fmtNum(s.articles_today)}  icon={Radio} />
-      <Stat label="Sources"         value={fmtNum(s.sources_total)}   icon={Database} />
+      <Stat label="Sources"         value={fmtNum(sourcesCount ?? s.sources_total)} icon={Database} />
       <Stat label="Last updated"    value={timeAgo(s.last_updated) || "—"} icon={Clock} hint={s.last_updated || ""} />
     </motion.div>
   );

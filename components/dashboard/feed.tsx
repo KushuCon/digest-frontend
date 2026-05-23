@@ -1,10 +1,9 @@
 "use client";
 import { useApi } from "@/hooks/use-api";
-import { Article, Source, asList } from "@/lib/api";
+import { asList, normalizeArticle, normalizeSources, getPagination } from "@/lib/api";
 import { ArticleCard, ArticleCardSkeleton } from "./article-card";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight, Inbox } from "lucide-react";
 
 const HOURS = [
@@ -26,15 +25,12 @@ export function Feed() {
   if (source) params.set("source", source);
   if (hours) params.set("hours", String(hours));
 
-  const { data, isLoading, error } = useApi<{ items?: Article[]; total?: number } | Article[]>(
-    `/api/articles?${params.toString()}`,
-  );
-  const { data: sourcesData } = useApi<Source[] | { sources: Source[] }>("/api/sources");
+  const { data, isLoading, error } = useApi<any>(`/api/articles?${params.toString()}`);
+  const { data: sourcesData } = useApi<any>("/api/sources");
 
-  const items = useMemo(() => asList<Article>(data as any), [data]);
-  const sources = useMemo(() => asList<Source>(sourcesData as any), [sourcesData]);
-  const total = (data as any)?.total ?? items.length;
-  const totalPages = Math.max(1, Math.ceil(total / limit));
+  const items = useMemo(() => asList<any>(data).map(normalizeArticle), [data]);
+  const sources = useMemo(() => normalizeSources(sourcesData), [sourcesData]);
+  const { total, pages: totalPages } = useMemo(() => getPagination(data, limit), [data, limit]);
 
   return (
     <section aria-labelledby="feed-heading" className="space-y-4">
@@ -57,7 +53,7 @@ export function Feed() {
       </div>
 
       {sources.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 scroll-fade-mask">
+        <div className="flex flex-wrap gap-1.5">
           <button
             onClick={() => { setSource(""); setPage(1); }}
             className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
@@ -83,7 +79,7 @@ export function Feed() {
       <div className="space-y-4">
         {isLoading && Array.from({ length: 5 }).map((_, i) => <ArticleCardSkeleton key={i} />)}
         {error && !isLoading && (
-          <div className="rounded-xl border border-bearish/30 bg-bearish/5 p-6 text-sm text-bearish">
+          <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-6 text-sm text-red-400">
             Couldn't load feed — {error.message}
           </div>
         )}
@@ -99,12 +95,13 @@ export function Feed() {
       <div className="flex items-center justify-between pt-2">
         <div className="text-xs text-muted-foreground">
           Page <span className="num">{page}</span> of <span className="num">{totalPages}</span>
+          {total > 0 && <span className="ml-2 text-muted-foreground/60">({total} total)</span>}
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page <= 1}>
+          <Button variant="outline" size="sm" onClick={() => { setPage((p) => Math.max(1, p - 1)); window.scrollTo(0,0); }} disabled={page <= 1}>
             <ChevronLeft className="h-4 w-4" /> Prev
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page >= totalPages}>
+          <Button variant="outline" size="sm" onClick={() => { setPage((p) => Math.min(totalPages, p + 1)); window.scrollTo(0,0); }} disabled={page >= totalPages}>
             Next <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
