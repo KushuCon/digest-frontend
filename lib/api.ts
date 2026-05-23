@@ -89,7 +89,7 @@ const q = (params: Record<string, string | number | undefined>) => {
 
 export const api = {
   articles: (p: { page?: number; limit?: number; source?: string; hours?: number } = {}) =>
-    j<{ items: Article[]; total: number; page: number; limit: number } | Article[]>(
+    j<{ articles: Article[]; pagination: any } | Article[]>(
       `/api/articles${q(p)}`,
     ),
 
@@ -121,9 +121,11 @@ export const api = {
 };
 
 /** Normalize list-shaped endpoints that may return [] or { items: [] }. */
-export function asList<T>(x: T[] | { items?: T[] } | undefined | null): T[] {
+
+export function asList<T>(x: T[] | { articles?: T[]; items?: T[] } | undefined | null): T[] {
   if (!x) return [];
   if (Array.isArray(x)) return x;
+  if (Array.isArray((x as any).articles)) return (x as any).articles;
   if (Array.isArray((x as any).items)) return (x as any).items;
   return [];
 }
