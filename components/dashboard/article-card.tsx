@@ -71,7 +71,8 @@ export function ArticleCard({ a, index = 0 }: { a: Article; index?: number }) {
               <AISummary text={a.summary!} />
             </div>
           ) : a.excerpt ? (
-            <p className="text-sm text-muted-foreground line-clamp-3">{a.excerpt}</p>
+            <p className="text-sm text-muted-foreground">{a.excerpt}</p>
+
           ) : null}
 
           {/* Image — full width below content */}

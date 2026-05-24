@@ -133,7 +133,7 @@ export function normalizeArticle(a: any): Article {
     source: a.source_name || a.source || "Unknown",
     url: a.source_url || a.url || "",
     published_at: a.scraped_at || a.published_at || "",
-    excerpt: a.content?.slice(0, 200) || a.excerpt || "",
+    excerpt: a.content || a.excerpt || "",
     summary: a.ai_summary || a.summary || "",
     image: a.image_url || a.image || null,
   };
