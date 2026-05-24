@@ -9,8 +9,8 @@ const items = [
   { href: "/", label: "Overview", icon: Activity },
   { href: "/feed", label: "News Feed", icon: Newspaper },
   // { href: "/portfolio", label: "Portfolio", icon: Briefcase },
-  { href: "/movers", label: "Movers", icon: TrendingUp },
-  { href: "/search", label: "Search", icon: Search },
+  // { href: "/movers", label: "Movers", icon: TrendingUp },
+  // { href: "/search", label: "Search", icon: Search },
 ];
 
 export function Sidebar() {
