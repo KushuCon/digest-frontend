@@ -41,13 +41,15 @@ interface Model {
 
 // ── Default free models (shown before API loads) ───────────────────────────
 const DEFAULT_MODELS: Model[] = [
-  { id: "deepseek/deepseek-r1:free",           name: "DeepSeek R1",      badge: "Reasoning" },
-  { id: "deepseek/deepseek-v3:free",           name: "DeepSeek V3",      badge: "Fast" },
-  { id: "google/gemini-2.0-flash-exp:free",    name: "Gemini 2.0 Flash", badge: "Google" },
-  { id: "qwen/qwen3-235b-a22b:free",           name: "Qwen3 235B",       badge: "Large" },
-  { id: "moonshotai/kimi-k2:free",             name: "Kimi K2",          badge: "Long CTX" },
-  { id: "minimax/minimax-m1:free",             name: "MiniMax M1",       badge: "Fast" },
+  { id: "openai/gpt-oss-120b:free", name: "GPT OSS 120B", badge: "Default" },
+  { id: "nousresearch/hermes-3-llama-3.1-405b:free", name: "Hermes 3 405B", badge: "Reasoning" },
+  { id: "deepseek/deepseek-v4-flash:free", name: "DeepSeek V4 Flash", badge: "Fast" },
   { id: "meta-llama/llama-3.3-70b-instruct:free", name: "Llama 3.3 70B", badge: "Meta" },
+  { id: "qwen/qwen3-coder:free", name: "Qwen3 Coder", badge: "Code" },
+  { id: "z-ai/glm-4.5-air:free", name: "GLM 4.5 Air", badge: "General" },
+  { id: "qwen/qwen3-next-80b-a3b-instruct:free", name: "Qwen3 Next 80B", badge: "General" },
+  { id: "minimax/minimax-m2.5:free", name: "MiniMax M2.5", badge: "Fast" },
+  { id: "google/gemma-4-31b-it:free", name: "Gemma 4 31B", badge: "Google" },
 ];
 
 // ── Markdown-ish renderer ──────────────────────────────────────────────────
@@ -110,7 +112,7 @@ export function Chatbot() {
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           setModels(data);
-          setModel(data[0]);
+          setModel(data.find((m) => m.id === "openai/gpt-oss-120b:free") || data[0]);
         }
       })
       .catch(() => {});
