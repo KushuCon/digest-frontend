@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/dashboard/sidebar";
 import { Topbar } from "@/components/dashboard/topbar";
 import { MobileNav } from "@/components/dashboard/mobile-nav";
 import { Toaster } from "sonner";
+import { Chatbot } from "@/components/dashboard/chatbot";
 
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const display = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-display", display: "swap" });
@@ -22,6 +23,7 @@ export const viewport: Viewport = { themeColor: "#0a0a0b" };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`dark ${sans.variable} ${display.variable} ${mono.variable}`}>
+      
       <body>
         <AuroraBackground />
         <div className="flex min-h-dvh">
@@ -35,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <MobileNav />
         <Toaster theme="dark" position="bottom-right" richColors />
+        <Chatbot />
       </body>
     </html>
   );
