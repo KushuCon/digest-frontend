@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Activity, Briefcase, Newspaper, Search, Settings, TrendingUp, Zap } from "lucide-react";
+import { Activity, Briefcase, Newspaper, Search, TrendingUp, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const items = [
@@ -53,11 +53,6 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="mt-auto px-3 text-[11px] text-muted-foreground">
-        <Link href="/settings" className="inline-flex items-center gap-2 hover:text-foreground">
-          <Settings className="h-3.5 w-3.5" /> Settings
-        </Link>
-      </div>
     </aside>
   );
 }

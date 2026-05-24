@@ -301,7 +301,7 @@ export function Chatbot() {
                     <button className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors border border-border/40 rounded-lg px-2.5 py-1.5">
                       <Sparkles className="h-3 w-3" />
                       <span className="max-w-[140px] truncate">{model.name}</span>
-                      <Badge variant="secondary" className="text-[9px] px-1 py-0">{model.badge}</Badge>
+                      <Badge variant="muted" className="text-[9px] px-1 py-0">{model.badge}</Badge>
                       <ChevronDown className="h-3 w-3" />
                     </button>
                   </DropdownMenuTrigger>
@@ -313,7 +313,7 @@ export function Chatbot() {
                         className={`flex items-center justify-between ${model.id === m.id ? "bg-primary/10" : ""}`}
                       >
                         <span className="text-sm">{m.name}</span>
-                        <Badge variant="secondary" className="text-[9px]">{m.badge}</Badge>
+                        <Badge variant="muted" className="text-[9px]">{m.badge}</Badge>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
